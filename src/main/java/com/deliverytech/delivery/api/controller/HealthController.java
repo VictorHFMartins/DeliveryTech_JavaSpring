@@ -13,10 +13,10 @@ public class HealthController {
     @Value("${spring.application.name}")
     private String application;
 
-    @Value("${app.version}")
+    @Value("${spring.application.version}")
     private String version;
 
-    @Value("${app.developer}")
+    @Value("${spring.application.group}")
     private String developer;
 
     @GetMapping("/health")

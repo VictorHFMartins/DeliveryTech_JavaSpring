@@ -5,6 +5,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.deliverytech.delivery.domain.model.Cliente;
 import com.deliverytech.delivery.domain.repository.ClienteRepository;
 
+import jakarta.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,8 +47,8 @@ public class ClienteService {
 
     // Buscar cliente por email
     @Transactional(readOnly = true)
-    public Optional<Cliente> buscarPorEmail(String email) {
-        return clienteRepository.findByEmail(email);
+    public Cliente buscarPorEmail(String email) {
+        return clienteRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado com email: " + email));
     }
 
     // Listar todos os clientes ativos
@@ -59,6 +61,8 @@ public class ClienteService {
     public Cliente atualizar(Long id, Cliente clienteAtualizado) {
         Cliente cliente = buscarPorId(id)
                 .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado: " + id));
+
+        validarDadosCliente(cliente);
 
         // Verificar se email não está sendo usado por outro cliente
         if (!cliente.getEmail().equals(clienteAtualizado.getEmail()) &&
@@ -78,7 +82,11 @@ public class ClienteService {
     // Inativar cliente (soft delete)
     public void inativar(Long id) {
         Cliente cliente = buscarPorId(id)
-                .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado: " + id));
+
+        if (cliente.getAtivo() == false){
+            throw new IllegalArgumentException("Cliente já está inativo: " + id);
+        }
 
         cliente.inativar();
         clienteRepository.save(cliente);

@@ -1,37 +1,68 @@
--- Dados de exemplo para testes
--- Arquivo: src/main/resources/data.sql
+-- ===========
+-- CLIENTES
+-- ===========
 
--- Inserir clientes
 INSERT INTO clientes (nome, email, telefone, endereco, data_cadastro, ativo) VALUES
-('João Silva', 'joao@email.com', '(11) 99999-1111', 'Rua A, 123 - São Paulo/SP', CURRENT_TIMESTAMP, true),
-('Maria Santos', 'maria@email.com', '(11) 99999-2222', 'Rua B, 456 - São Paulo/SP', CURRENT_TIMESTAMP, true),
-('Pedro Oliveira', 'pedro@email.com', '(11) 99999-3333', 'Rua C, 789 - São Paulo/SP', CURRENT_TIMESTAMP, true);
+('João Silva',  'joao@email.com',  '(11) 99999-1111', 'Rua A, 123 - São Paulo/SP', CURRENT_TIMESTAMP, TRUE),
+('Maria Santos','maria@email.com', '(11) 99999-2222', 'Rua B, 456 - São Paulo/SP', CURRENT_TIMESTAMP, TRUE),
+('Pedro Oliveira','pedro@email.com','(11) 99999-3333','Rua C, 789 - São Paulo/SP', CURRENT_TIMESTAMP, TRUE);
 
--- Inserir restaurantes
-INSERT INTO restaurantes (nome, categoria, endereco, telefone, taxa_entrega, avaliacao, ativo) VALUES
-('Pizzaria Bella', 'Italiana', 'Av. Paulista, 1000 - São Paulo/SP', '(11) 3333-1111', 5.00, 4.5, true),
-('Burger House', 'Hamburgueria', 'Rua Augusta, 500 - São Paulo/SP', '(11) 3333-2222', 3.50, 4.2, true),
-('Sushi Master', 'Japonesa', 'Rua Liberdade, 200 - São Paulo/SP', '(11) 3333-3333', 8.00, 4.8, true);
+-- ===========
+-- RESTAURANTES
+--  - cnpj obrigatório e único
+--  - estado (STRING): ABERTO | FECHADO | MANUTENCAO
+--  - email pode ser nulo se não quiser usar agora
+-- ===========
 
--- Inserir produtos
-INSERT INTO produtos (nome, descricao, preco, categoria, disponivel, restaurante_id) VALUES
--- Pizzaria Bella
-('Pizza Margherita', 'Molho de tomate, mussarela e manjericão', 35.90, 'Pizza', true, 1),
-('Pizza Calabresa', 'Molho de tomate, mussarela e calabresa', 38.90, 'Pizza', true, 1),
-('Lasanha Bolonhesa', 'Lasanha tradicional com molho bolonhesa', 28.90, 'Massa', true, 1),
+INSERT INTO restaurantes (
+  nome, cnpj, categoria, endereco, telefone, email,
+  latitude, longitude, horario_abertura, horario_fechamento,
+  estado, data_cadastro, ativo
+) VALUES
+('Pizzaria Bella', '12.345.678/0001-11', 'Italiana', 'Av. Paulista, 1000 - São Paulo/SP', '(11) 3333-1111', NULL,
+  0, 0, TIME '18:00:00', TIME '23:59:00',
+  'ABERTO', CURRENT_TIMESTAMP, TRUE),
 
--- Burger House
-('X-Burger', 'Hambúrguer, queijo, alface e tomate', 18.90, 'Hambúrguer', true, 2),
-('X-Bacon', 'Hambúrguer, queijo, bacon, alface e tomate', 22.90, 'Hambúrguer', true, 2),
-('Batata Frita', 'Porção de batata frita crocante', 12.90, 'Acompanhamento', true, 2),
+('Burger House', '98.765.432/0001-22', 'Hamburgueria', 'Rua Augusta, 500 - São Paulo/SP', '(11) 3333-2222', NULL,
+  0, 0, TIME '11:00:00', TIME '22:00:00',
+  'ABERTO', CURRENT_TIMESTAMP, TRUE),
 
--- Sushi Master
-('Combo Sashimi', '15 peças de sashimi variado', 45.90, 'Sashimi', true, 3),
-('Hot Roll Salmão', '8 peças de hot roll de salmão', 32.90, 'Hot Roll', true, 3),
-('Temaki Atum', 'Temaki de atum com cream cheese', 15.90, 'Temaki', true, 3);
+('Sushi Master', '11.222.333/0001-44', 'Japonesa', 'Rua Liberdade, 200 - São Paulo/SP', '(11) 3333-3333', NULL,
+  0, 0, TIME '17:30:00', TIME '23:00:00',
+  'FECHADO', CURRENT_TIMESTAMP, TRUE);
 
--- Inserir pedidos de exemplo
-INSERT INTO pedidos (numero_pedido, data_pedido, status, valor_total, observacoes, cliente_id, restaurante_id, itens) VALUES
-('PED1234567890', CURRENT_TIMESTAMP, 'PENDENTE', 54.80, 'Sem cebola na pizza', 1, 1, 'Pizza Margherita, Pizza Calabresa'),
-('PED1234567891', CURRENT_TIMESTAMP, 'CONFIRMADO', 41.80, '', 2, 2, 'X-Burger, Batata Frita'),
-('PED1234567892', CURRENT_TIMESTAMP, 'ENTREGUE', 78.80, 'Wasabi à parte', 3, 3, 'Combo Sashimi, Hot Roll Salmão, Temaki Atum');
+-- ===========
+-- PRODUTOS
+--  - categoria (STRING): BEBIDAS | COMIDAS | SOBREMESAS
+--  - estoque (int), preco (decimal), ativo (bool), restaurante_id (FK)
+-- ===========
+
+-- Pizzaria Bella (id=1)
+INSERT INTO produtos (nome, descricao, categoria, estoque, preco, ativo, data_cadastro, restaurante_id) VALUES
+('Pizza Margherita', 'Molho de tomate, mussarela e manjericão', 'COMIDAS', 50, 35.90, TRUE, CURRENT_TIMESTAMP, 1),
+('Pizza Calabresa',  'Molho de tomate, mussarela e calabresa',   'COMIDAS', 40, 38.90, TRUE, CURRENT_TIMESTAMP, 1),
+('Lasanha Bolonhesa','Lasanha tradicional com molho bolonhesa',  'COMIDAS', 30, 28.90, TRUE, CURRENT_TIMESTAMP, 1);
+
+-- Burger House (id=2)
+INSERT INTO produtos (nome, descricao, categoria, estoque, preco, ativo, data_cadastro, restaurante_id) VALUES
+('X-Burger',     'Hambúrguer, queijo, alface e tomate',         'COMIDAS', 100, 18.90, TRUE, CURRENT_TIMESTAMP, 2),
+('X-Bacon',      'Hambúrguer, queijo, bacon, alface e tomate',  'COMIDAS',  80, 22.90, TRUE, CURRENT_TIMESTAMP, 2),
+('Batata Frita', 'Porção de batata frita crocante',             'COMIDAS', 150, 12.90, TRUE, CURRENT_TIMESTAMP, 2);
+
+-- Sushi Master (id=3)
+INSERT INTO produtos (nome, descricao, categoria, estoque, preco, ativo, data_cadastro, restaurante_id) VALUES
+('Combo Sashimi',  '15 peças de sashimi variado',      'COMIDAS', 25, 45.90, TRUE, CURRENT_TIMESTAMP, 3),
+('Hot Roll Salmão','8 peças de hot roll de salmão',    'COMIDAS', 40, 32.90, TRUE, CURRENT_TIMESTAMP, 3),
+('Temaki Atum',    'Temaki de atum com cream cheese',  'COMIDAS', 60, 15.90, TRUE, CURRENT_TIMESTAMP, 3);
+
+-- ===========
+-- AVALIAÇÕES
+--  - nota (STRING): PESSIMO | RUIM | REGULAR | BOM | OTIMO | EXCELENTE
+--  - cliente_id e restaurante_id devem existir
+-- ===========
+
+INSERT INTO avaliacoes (cliente_id, restaurante_id, nota, comentario, data_avaliacao) VALUES
+(1, 1, 'EXCELENTE', 'Pizza muito boa!',                 CURRENT_TIMESTAMP),
+(2, 1, 'BOM',       'Entrega rápida e sabor ok',        CURRENT_TIMESTAMP),
+(2, 2, 'OTIMO',     'Hambúrguer no ponto certo',        CURRENT_TIMESTAMP),
+(3, 3, 'REGULAR',   'Poderia ter mais opções no combo', CURRENT_TIMESTAMP);

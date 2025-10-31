@@ -1,13 +1,15 @@
 package com.deliverytech.delivery.api.controller;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import java.time.LocalDateTime;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 @RestController
+@RequestMapping("/health")
 public class HealthController {
 
     @Value("${spring.application.name}")
@@ -19,7 +21,7 @@ public class HealthController {
     @Value("${spring.application.group}")
     private String developer;
 
-    @GetMapping("/health")
+    @GetMapping
     public Map<String, String> health() {
         return Map.of(
                 "status", "UP",
@@ -27,7 +29,7 @@ public class HealthController {
                 "service", "Delevery API");
     }
 
-    @GetMapping("/health/info")
+    @GetMapping("/info")
     public appInfo info() {
         return new appInfo(
                 application,
@@ -49,6 +51,7 @@ public class HealthController {
             String Campus,
             String javaVersion,
             String framework) {
+
     }
 
 }

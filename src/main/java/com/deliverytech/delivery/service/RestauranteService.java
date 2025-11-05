@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.deliverytech.delivery.domain.model.Produto;
 import com.deliverytech.delivery.domain.model.Restaurante;
+import com.deliverytech.delivery.domain.repository.ProdutoRepository;
 import com.deliverytech.delivery.domain.repository.RestauranteRepository;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class RestauranteService {
 
     private final RestauranteRepository restauranteRepository;
+    private final ProdutoRepository produtoRepository;
 
     /* ===== CRUD ===== */
     public Restaurante criar(Restaurante restaurante) {
@@ -119,10 +121,11 @@ public class RestauranteService {
         Restaurante restaurante = buscarPorId(restauranteId);
         produto.setId(null);
 
-        restaurante.adicionarProduto(produto);
-        restauranteRepository.save(restaurante);
+        produto.setRestaurante(restaurante);
 
-        return produto;
+        Produto salvo = produtoRepository.save(produto);
+
+        return salvo;
     }
 
     public List<Restaurante> listarPorEstado(Restaurante.Estado estado) {

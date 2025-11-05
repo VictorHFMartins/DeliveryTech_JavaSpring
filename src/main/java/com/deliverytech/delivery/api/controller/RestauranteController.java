@@ -41,13 +41,13 @@ public class RestauranteController {
         return ResponseEntity.ok(restauranteService.buscarPorId(id));
     }
 
-    @GetMapping("/nome")
-    public ResponseEntity<List<Restaurante>> buscarPorNome(@RequestParam String nome) {
+    @GetMapping("/buscar")
+    public ResponseEntity<List<Restaurante>> buscarPorNome(@RequestParam("nome") String nome) {
         return ResponseEntity.ok(restauranteService.buscarPorNome(nome));
     }
 
-    @GetMapping("/email")
-    public ResponseEntity<?> buscarPorEmail(@RequestParam String email) {
+    @GetMapping("/buscaremail")
+    public ResponseEntity<?> buscarPorEmail(@RequestParam("email") String email) {
         return ResponseEntity.ok(restauranteService.buscarPorEmail(email));
     }
 
@@ -56,8 +56,8 @@ public class RestauranteController {
         return ResponseEntity.ok(restauranteService.listarAbertos());
     }
 
-    @GetMapping("/por-estado")
-    public ResponseEntity<List<Restaurante>> listarPorEstado(@RequestParam Restaurante.Estado estado) {
+    @GetMapping("/estado")
+    public ResponseEntity<List<Restaurante>> listarPorEstado(@RequestParam("value") Restaurante.Estado estado) {
         return ResponseEntity.ok(restauranteService.listarPorEstado(estado));
     }
 

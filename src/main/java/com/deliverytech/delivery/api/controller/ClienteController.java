@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -62,10 +61,10 @@ public class ClienteController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<Void> ativar(@PathVariable Long id) {
+    @PutMapping("/ativar/{id}")
+    public ResponseEntity<Cliente> ativar(@PathVariable Long id) {
         clienteService.ativar(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(clienteService.buscarPorId(id));
     }
 
     @GetMapping("/buscar")
@@ -74,7 +73,7 @@ public class ClienteController {
     }
 
     @GetMapping("/email")
-    public ResponseEntity<Cliente> buscarPorEmail(@RequestParam String email) {
+    public ResponseEntity<Cliente> buscarPorEmail(@RequestParam("value") String email) {
         return ResponseEntity.ok(clienteService.buscarPorEmail(email));
     }
 }

@@ -47,8 +47,8 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoService.buscarPorId(id));
     }
 
-    @GetMapping("/por-nome")
-    public ResponseEntity<List<Produto>> buscarPorNome(@RequestParam String nome) {
+    @GetMapping("/nome")
+    public ResponseEntity<List<Produto>> buscarPorNome(@RequestParam("value") String nome) {
         return ResponseEntity.ok(produtoService.buscarPorNome(nome));
     }
 
@@ -79,7 +79,7 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoService.listarInativos());
     }
 
-    @GetMapping("/por-restaurante/{id}")
+    @GetMapping("/restaurante/{id}")
     public ResponseEntity<List<Produto>> listarPorRestaurante(@PathVariable Long id) {
         return ResponseEntity.ok(produtoService.listarPorRestaurante(id));
     }

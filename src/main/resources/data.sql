@@ -19,7 +19,7 @@ INSERT INTO restaurantes (
   latitude, longitude, horario_abertura, horario_fechamento,
   estado, data_cadastro, ativo
 ) VALUES
-('Pizzaria Bella', '12.345.678/0001-11', 'Italiana', 'Av. Paulista, 1000 - São Paulo/SP', '(11) 3333-1111', NULL,
+('Pizzaria Bella', '12.345.678/0001-11', 'Italiana', 'Av. Paulista, 1000 - São Paulo/SP', '(11) 3333-1111', 'pizzariabela@email.com',
   0, 0, TIME '18:00:00', TIME '23:59:00',
   'ABERTO', CURRENT_TIMESTAMP, TRUE),
 
@@ -66,3 +66,26 @@ INSERT INTO avaliacoes (cliente_id, restaurante_id, nota, comentario, data_avali
 (2, 1, 'BOM',       'Entrega rápida e sabor ok',        CURRENT_TIMESTAMP),
 (2, 2, 'OTIMO',     'Hambúrguer no ponto certo',        CURRENT_TIMESTAMP),
 (3, 3, 'REGULAR',   'Poderia ter mais opções no combo', CURRENT_TIMESTAMP);
+
+-- ===== PEDIDOS =====
+INSERT INTO pedidos (numero_pedido, data_pedido, status, valor_total, observacoes, cliente_id, restaurante_id)
+VALUES
+  ('PED20251030-0001', CURRENT_TIMESTAMP, 'PENDENTE', 112.70, 'Sem cebola na calabresa', 1, 1),
+  ('PED20251030-0002', CURRENT_TIMESTAMP, 'CONFIRMADO', 31.80,  'Retirar no balcão',     2, 2);
+
+-- ===== ITENS DO PEDIDO 0001 (Restaurante 1) =====
+-- Pizza Margherita (35,90) x1 = 35,90
+-- Pizza Calabresa (38,90)  x2 = 77,80  -> total = 112,70
+INSERT INTO pedido_itens (pedido_id, produto_id, quantidade, preco_unitario, subtotal)
+VALUES
+  ( (SELECT id FROM pedidos WHERE numero_pedido = 'PED20251030-0001'), 1, 1, 35.90, 35.90 ),
+  ( (SELECT id FROM pedidos WHERE numero_pedido = 'PED20251030-0001'), 2, 2, 38.90, 77.80 );
+
+-- ===== ITENS DO PEDIDO 0002 (Restaurante 2) =====
+-- X-Burger (18,90) x1 = 18,90
+-- Batata Frita (12,90) x1 = 12,90 -> total = 31,80
+INSERT INTO pedido_itens (pedido_id, produto_id, quantidade, preco_unitario, subtotal)
+VALUES
+  ( (SELECT id FROM pedidos WHERE numero_pedido = 'PED20251030-0002'), 4, 1, 18.90, 18.90 ),
+  ( (SELECT id FROM pedidos WHERE numero_pedido = 'PED20251030-0002'), 6, 1, 12.90, 12.90 );
+

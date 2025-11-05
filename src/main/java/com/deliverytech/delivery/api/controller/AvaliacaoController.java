@@ -68,9 +68,9 @@ public class AvaliacaoController {
         return ResponseEntity.ok(avaliacaoService.buscarPorCliente(id));
     }
 
-    @GetMapping
+    @GetMapping("/nota")
     public ResponseEntity<List<Avaliacao>> buscarPorNota(
-            @RequestParam(required = false) Avaliacao.Nota nota) {
+            @RequestParam("nota") Avaliacao.Nota nota) {
         if (nota == null) {
             return ResponseEntity.ok(List.of());
         }

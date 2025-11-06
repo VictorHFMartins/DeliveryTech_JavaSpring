@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.deliverytech.delivery.domain.enums.EstadoRestaurante;
 import com.deliverytech.delivery.domain.model.Produto;
 import com.deliverytech.delivery.domain.model.Restaurante;
 import com.deliverytech.delivery.domain.repository.ProdutoRepository;
@@ -57,7 +58,7 @@ public class RestauranteService {
 
     @Transactional(readOnly = true)
     public List<Restaurante> listarAbertos() {
-        return restauranteRepository.findByEstado(Restaurante.Estado.ABERTO);
+        return restauranteRepository.findByEstado(EstadoRestaurante.ABERTO);
     }
 
     public Restaurante atualizar(Long id, Restaurante dados) {
@@ -74,7 +75,7 @@ public class RestauranteService {
         r.setEmail(novoEmail);
         r.setTelefone(dados.getTelefone());
         r.setEndereco(dados.getEndereco());
-        r.setCategoria(dados.getCategoria());
+        r.setClasse(dados.getClasse());
 
         r.setHorarioAbertura(dados.getHorarioAbertura());
         r.setHorarioFechamento(dados.getHorarioFechamento());
@@ -128,7 +129,7 @@ public class RestauranteService {
         return salvo;
     }
 
-    public List<Restaurante> listarPorEstado(Restaurante.Estado estado) {
+    public List<Restaurante> listarPorEstado(EstadoRestaurante estado) {
         if (estado == null) {
             throw new IllegalArgumentException("O estado do restaurante não pode ser nulo.");
         }

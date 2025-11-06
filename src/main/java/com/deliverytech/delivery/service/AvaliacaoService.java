@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.deliverytech.delivery.domain.enums.NotaAvaliacao;
 import com.deliverytech.delivery.domain.model.Avaliacao;
 import com.deliverytech.delivery.domain.model.Cliente;
 import com.deliverytech.delivery.domain.model.Restaurante;
@@ -76,7 +77,7 @@ public class AvaliacaoService {
     }
 
     @Transactional(readOnly = true)
-    public List<Avaliacao> buscarPorNota(Avaliacao.Nota nota) {
+    public List<Avaliacao> buscarPorNota(NotaAvaliacao nota) {
         return avaliacaoRepository.findByNota(nota);
     }
 

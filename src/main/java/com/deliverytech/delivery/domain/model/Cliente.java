@@ -1,22 +1,28 @@
 package com.deliverytech.delivery.domain.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "clientes")
@@ -24,10 +30,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     @NotBlank(message = "O nome é obrigatório")
@@ -38,12 +48,12 @@ public class Cliente {
     @Column(unique = true, nullable = false, length = 120)
     private String email;
 
-    @Pattern(regexp = "^[\\d\\s\\-()+]+$", message = "Telefone deve conter apenas números e caracteres válidos")
-    @Size(min = 8, max = 15, message = "Telefone deve ter entre 8 e 15 caracteres")
-    private String telefone;
+    @OneToMany(mappedBy = "telefone", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Telefone> telefones;
 
-    @Size(max = 255)
-    private String endereco;
+    @ManyToOne
+    @JoinColumn(name = "Endereco_id", nullable = false)
+    private Endereco endereco;
 
     @Column(name = "data_cadastro", updatable = false)
     private LocalDateTime dataCadastro;
@@ -58,10 +68,11 @@ public class Cliente {
             this.ativo = true;
         }
     }
+
     public void ativar() {
         this.ativo = true;
     }
-    
+
     public void inativar() {
         this.ativo = false;
     }

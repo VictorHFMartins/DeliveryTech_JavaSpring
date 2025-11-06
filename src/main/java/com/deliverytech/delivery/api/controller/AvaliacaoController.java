@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.deliverytech.delivery.domain.enums.NotaAvaliacao;
 import com.deliverytech.delivery.domain.model.Avaliacao;
 import com.deliverytech.delivery.service.AvaliacaoService;
 
@@ -70,7 +71,7 @@ public class AvaliacaoController {
 
     @GetMapping("/nota")
     public ResponseEntity<List<Avaliacao>> buscarPorNota(
-            @RequestParam("nota") Avaliacao.Nota nota) {
+            @RequestParam("nota") NotaAvaliacao nota) {
         if (nota == null) {
             return ResponseEntity.ok(List.of());
         }

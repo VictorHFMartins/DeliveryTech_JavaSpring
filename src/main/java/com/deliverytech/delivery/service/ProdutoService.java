@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.deliverytech.delivery.domain.enums.CategoriaProduto;
 import com.deliverytech.delivery.domain.model.Produto;
 import com.deliverytech.delivery.domain.model.Restaurante;
 import com.deliverytech.delivery.domain.repository.ProdutoRepository;
@@ -58,7 +59,7 @@ public class ProdutoService {
         produto.setDescricao(produtoAtualizado.getDescricao());
         produto.setPreco(produtoAtualizado.getPreco());
         produto.setCategoria(produtoAtualizado.getCategoria());
- 
+
         return produtoRepository.save(produto);
     }
 
@@ -101,7 +102,7 @@ public class ProdutoService {
     }
 
     @Transactional(readOnly = true)
-    public List<Produto> buscarPorCategoria(Produto.Categoria categoria) {
+    public List<Produto> buscarPorCategoria(CategoriaProduto categoria) {
         return produtoRepository.findByCategoria(categoria);
     }
 

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.deliverytech.delivery.domain.enums.CategoriaProduto;
 import com.deliverytech.delivery.domain.model.Produto;
 import com.deliverytech.delivery.service.ProdutoService;
 
@@ -53,7 +54,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/categoria")
-    public ResponseEntity<List<Produto>> buscarPorCategoria(@RequestParam Produto.Categoria categoria) {
+    public ResponseEntity<List<Produto>> buscarPorCategoria(@RequestParam CategoriaProduto categoria) {
         return ResponseEntity.ok(produtoService.buscarPorCategoria(categoria));
     }
 

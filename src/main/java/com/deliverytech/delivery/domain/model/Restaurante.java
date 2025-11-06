@@ -5,6 +5,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.deliverytech.delivery.domain.enums.ClasseRestaurante;
+import com.deliverytech.delivery.domain.enums.EstadoRestaurante;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
@@ -71,9 +73,9 @@ public class Restaurante {
     @Builder.Default
     private List<Produto> produtos = new ArrayList<>();
 
-    // Se for livre, mantenha String; se for fechado, troque por enum + @Enumerated
     @Size(max = 60)
-    private String categoria;
+    @Enumerated(EnumType.STRING)
+    private ClasseRestaurante classe;
 
     @Size(min = 8, max = 20, message = "Telefone deve ter entre 8 e 20 caracteres")
     @Pattern(regexp = "^[\\d\\-\\+\\(\\)\\s]{8,20}$", message = "Telefone inválido")
@@ -105,11 +107,7 @@ public class Restaurante {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private Estado estado; // ABERTO, FECHADO, MANUTENCAO
-
-    public enum Estado {
-        ABERTO, FECHADO, MANUTENCAO
-    }
+    private EstadoRestaurante estado;
 
     @Column(name = "data_cadastro", updatable = false)
     private LocalDateTime dataCadastro;
@@ -124,7 +122,7 @@ public class Restaurante {
             this.ativo = Boolean.TRUE;
         }
         if (this.estado == null) {
-            this.estado = Estado.FECHADO;
+            this.estado = EstadoRestaurante.FECHADO;
         }
     }
 
@@ -140,20 +138,20 @@ public class Restaurante {
         this.ativo = false;
     }
 
-    public void atualizarEstado(Estado novoEstado) {
+    public void atualizarEstado(EstadoRestaurante novoEstado) {
         this.estado = novoEstado;
     }
 
     public boolean isAberto() {
-        return this.estado == Estado.ABERTO;
+        return this.estado == EstadoRestaurante.ABERTO;
     }
 
     public boolean isFechado() {
-        return this.estado == Estado.FECHADO;
+        return this.estado == EstadoRestaurante.FECHADO;
     }
 
     public boolean isEmManutencao() {
-        return this.estado == Estado.MANUTENCAO;
+        return this.estado == EstadoRestaurante.MANUTENCAO;
     }
 
     public void atualizarCoordenadas(double lat, double lon) {

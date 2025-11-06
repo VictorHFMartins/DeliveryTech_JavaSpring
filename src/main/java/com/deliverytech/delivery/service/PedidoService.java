@@ -7,9 +7,9 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.deliverytech.delivery.domain.enums.StatusPedido;
 import com.deliverytech.delivery.domain.model.Cliente;
 import com.deliverytech.delivery.domain.model.Pedido;
-import com.deliverytech.delivery.domain.model.Pedido.Status;
 import com.deliverytech.delivery.domain.model.Restaurante;
 import com.deliverytech.delivery.domain.repository.ClienteRepository;
 import com.deliverytech.delivery.domain.repository.PedidoRepository;
@@ -56,7 +56,7 @@ public class PedidoService {
 
         Pedido pedido = Pedido.builder()
                 .numeroPedido(novoNumero())
-                .status(Pedido.Status.PENDENTE)
+                .status(StatusPedido.PENDENTE)
                 .valorTotal(req.valorTotal() != null ? req.valorTotal() : BigDecimal.ZERO)
                 .observacoes(req.observacoes())
                 .cliente(cliente)
@@ -107,10 +107,10 @@ public class PedidoService {
     }
 
     @Transactional
-    public Pedido atualizarStatus(Long id, Status novoStatus) {
+    public Pedido atualizarStatus(Long id, StatusPedido novoStatus) {
         Pedido pedido = buscarEntityPorId(id);
 
-        Status atual = pedido.getStatus();
+        StatusPedido atual = pedido.getStatus();
         if (atual == novoStatus) {
             return pedido;
         }
@@ -123,12 +123,12 @@ public class PedidoService {
         return pedidoRepository.save(pedido);
     }
 
-    private boolean transicaoValida(Status de, Status para) {
+    private boolean transicaoValida(StatusPedido de, StatusPedido para) {
         return switch (de) {
             case PENDENTE ->
-                para == Status.CONFIRMADO || para == Status.CANCELADO;
+                para == StatusPedido.CONFIRMADO || para == StatusPedido.CANCELADO;
             case CONFIRMADO ->
-                para == Status.ENTREGUE || para == Status.CANCELADO;
+                para == StatusPedido.ENTREGUE || para == StatusPedido.CANCELADO;
             case ENTREGUE, CANCELADO ->
                 false;
             default ->

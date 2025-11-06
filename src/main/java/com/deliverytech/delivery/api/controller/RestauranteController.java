@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.deliverytech.delivery.domain.enums.EstadoRestaurante;
 import com.deliverytech.delivery.domain.model.Produto;
 import com.deliverytech.delivery.domain.model.Restaurante;
 import com.deliverytech.delivery.service.RestauranteService;
@@ -57,7 +58,7 @@ public class RestauranteController {
     }
 
     @GetMapping("/estado")
-    public ResponseEntity<List<Restaurante>> listarPorEstado(@RequestParam("value") Restaurante.Estado estado) {
+    public ResponseEntity<List<Restaurante>> listarPorEstado(@RequestParam("value") EstadoRestaurante estado) {
         return ResponseEntity.ok(restauranteService.listarPorEstado(estado));
     }
 

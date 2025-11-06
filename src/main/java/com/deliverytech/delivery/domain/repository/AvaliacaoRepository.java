@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.deliverytech.delivery.domain.enums.NotaAvaliacao;
 import com.deliverytech.delivery.domain.model.Avaliacao;
 
 @Repository
@@ -19,7 +20,7 @@ public interface AvaliacaoRepository extends JpaRepository<Avaliacao, Long> {
     List<Avaliacao> findByClienteId(Long clienteId);
 
     // Buscar avaliações por nota
-    List<Avaliacao> findByNota(Avaliacao.Nota nota);
+    List<Avaliacao> findByNota(NotaAvaliacao nota);
 
     // 🔹 Listar restaurantes ordenados pela média das notas (ASC)
     @Query("""

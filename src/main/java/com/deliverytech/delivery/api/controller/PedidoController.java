@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.deliverytech.delivery.domain.enums.StatusPedido;
 import com.deliverytech.delivery.domain.model.Pedido;
 import com.deliverytech.delivery.service.PedidoService;
 import com.deliverytech.delivery.service.PedidoService.CreatePedidoRequest;
@@ -55,7 +56,7 @@ public class PedidoController {
     @PutMapping("/{id}/status")
     public ResponseEntity<PedidoResponse> atualizarStatus(
             @PathVariable Long id,
-            @RequestParam Pedido.Status status) {
+            @RequestParam StatusPedido status) {
 
         Pedido atualizado = pedidoService.atualizarStatus(id, status);
         PedidoResponse resp = pedidoService.buscarPorId(atualizado.getId());
@@ -64,7 +65,7 @@ public class PedidoController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> cancelar(@PathVariable Long id) {
-        pedidoService.atualizarStatus(id, Pedido.Status.CANCELADO);
+        pedidoService.atualizarStatus(id, StatusPedido.CANCELADO);
         return ResponseEntity.noContent().build();
     }
 }

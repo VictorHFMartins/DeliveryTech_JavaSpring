@@ -6,7 +6,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.deliverytech.delivery.domain.model.Cliente;
+import com.deliverytech.delivery.domain.model.Telefone;
+import com.deliverytech.delivery.domain.repository.CepRepository;
 import com.deliverytech.delivery.domain.repository.ClienteRepository;
+import com.deliverytech.delivery.domain.repository.EnderecoRepository;
+import com.deliverytech.delivery.domain.repository.TelefoneRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +21,9 @@ import lombok.RequiredArgsConstructor;
 public class ClienteService {
 
     private final ClienteRepository clienteRepository;
+    private final EnderecoRepository enderecoRepository;
+    private final CepRepository cepRepository;
+    private final TelefoneRepository telefoneRepository;
 
     // Cadastrar novo cliente
     public Cliente criar(Cliente cliente) {
@@ -27,6 +34,30 @@ public class ClienteService {
 
         if (clienteRepository.existsByEmail(cliente.getEmail())) {
             throw new IllegalArgumentException("Email já cadastrado: " + cliente.getEmail());
+        }
+
+        // Garantir que o Endereco esteja vinculado a um CEP válido
+        if (cliente.getEndereco() == null || cliente.getEndereco().getCep() == null) {
+            throw new IllegalArgumentException("O endereço e o CEP são obrigatórios.");
+        }
+
+        var cep = cepRepository.findByCodigo(cliente.getEndereco().getCep().getCodigo())
+                .orElseThrow(() -> new EntityNotFoundException("CEP não encontrado."));
+
+        cliente.getEndereco().setCep(cep);
+        enderecoRepository.save(cliente.getEndereco());
+
+        // Associar cliente em cada telefone antes de salvar
+        if (cliente.getTelefones() != null) {
+            for (Telefone t : cliente.getTelefones()) {
+                boolean existe = telefoneRepository
+                        .existsByClienteIdAndDddAndNumero(cliente.getId(), t.getDdd(), t.getNumero());
+                if (existe) {
+                    throw new IllegalArgumentException("Telefone já cadastrado para este cliente: ("
+                            + t.getDdd() + ") " + t.getNumero());
+                }
+                t.setCliente(cliente);
+            }
         }
 
         // ativo por padrão
@@ -57,24 +88,43 @@ public class ClienteService {
 
     // Atualizar dados do cliente
     public Cliente atualizar(Long id, Cliente clienteAtualizado) {
-        Cliente cliente = buscarPorId(id);
+        Cliente existente = buscarPorId(id);
 
         validarDadosCliente(clienteAtualizado);
 
         String novoEmail = normalizarEmail(clienteAtualizado.getEmail());
 
         // se email mudou, verificar duplicidade
-        if (!cliente.getEmail().equals(novoEmail) && clienteRepository.existsByEmail(novoEmail)) {
+        if (!existente.getEmail().equals(novoEmail) && clienteRepository.existsByEmail(novoEmail)) {
             throw new IllegalArgumentException("Email já cadastrado: " + novoEmail);
         }
 
         // Atualizar campos permitidos
-        cliente.setNome(clienteAtualizado.getNome());
-        cliente.setEmail(novoEmail);
-        cliente.setTelefone(clienteAtualizado.getTelefone());
-        cliente.setEndereco(clienteAtualizado.getEndereco());
+        existente.setNome(clienteAtualizado.getNome());
+        existente.setEmail(novoEmail);
 
-        return clienteRepository.save(cliente);
+        // Atualiza o endereço (mantendo CEP original)
+        if (clienteAtualizado.getEndereco() != null) {
+            existente.getEndereco().setLogradouro(clienteAtualizado.getEndereco().getLogradouro());
+            existente.getEndereco().setNumero(clienteAtualizado.getEndereco().getNumero());
+            existente.getEndereco().setComplemento(clienteAtualizado.getEndereco().getComplemento());
+        }
+
+        // Substitui lista de telefones
+        existente.getTelefones().clear();
+        if (clienteAtualizado.getTelefones() != null) {
+            for (Telefone t : clienteAtualizado.getTelefones()) {
+                boolean existe = telefoneRepository
+                        .existsByClienteIdAndDddAndNumero(clienteAtualizado.getId(), t.getDdd(), t.getNumero());
+                if (existe) {
+                    throw new IllegalArgumentException("Telefone já cadastrado para este cliente: ("
+                            + t.getDdd() + ") " + t.getNumero());
+                }
+                t.setCliente(clienteAtualizado);
+            }
+        }
+
+        return clienteRepository.save(existente);
     }
 
     public void ativar(Long id) {

@@ -2,6 +2,8 @@ package com.deliverytech.delivery.domain.model;
 
 import java.time.LocalDateTime;
 
+import com.deliverytech.delivery.domain.enums.NotaAvaliacao;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -39,11 +41,7 @@ public class Avaliacao {
 
     // Nota atribuída
     @Enumerated(EnumType.STRING)
-    private Nota nota;
-
-    public enum Nota {
-        PESSIMO, RUIM, REGULAR, BOM, OTIMO, EXCELENTE
-    }
+    private NotaAvaliacao nota;
 
     private String comentario;
 

@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.deliverytech.delivery.domain.enums.StatusPedido;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,6 +36,7 @@ public class Pedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    
     private Long id;
 
     @Column(name = "numero_pedido", nullable = false, unique = true, length = 30)
@@ -56,16 +59,7 @@ public class Pedido {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Status status;
-
-    public enum Status {
-        PENDENTE,
-        CONFIRMADO,
-        PREPARO,
-        DESPACHADO,
-        ENTREGUE,
-        CANCELADO
-    }
+    private StatusPedido status;
 
     @Column(name = "valor_total", nullable = false, precision = 10, scale = 2)
     private BigDecimal valorTotal;
@@ -83,7 +77,7 @@ public class Pedido {
             this.dataPedido = LocalDateTime.now();
         }
         if (this.status == null) {
-            this.status = Status.PENDENTE;
+            this.status = StatusPedido.PENDENTE;
         }
         if (this.valorTotal == null) {
             this.valorTotal = BigDecimal.ZERO;

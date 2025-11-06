@@ -3,6 +3,7 @@ package com.deliverytech.delivery.domain.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.deliverytech.delivery.domain.enums.CategoriaProduto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -53,13 +54,7 @@ public class Produto {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private Categoria categoria;
-
-    public enum Categoria {
-        BEBIDAS,
-        COMIDAS,
-        SOBREMESAS
-    }
+    private CategoriaProduto categoria;
 
     @Min(value = 0, message = "O estoque não pode ser negativo")
     @Column(nullable = false)

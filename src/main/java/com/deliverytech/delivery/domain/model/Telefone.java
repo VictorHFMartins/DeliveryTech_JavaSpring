@@ -33,7 +33,7 @@ public class Telefone {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 

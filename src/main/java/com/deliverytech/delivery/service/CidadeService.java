@@ -56,7 +56,7 @@ public class CidadeService {
 
     public Cidade salvar(String nomeCidade, String uf) {
         String ufNorm = normalizarUf(uf);
-        if (!cidadeRepository.existeCidadeNaUf(ufNorm, nomeCidade)) {
+        if (!cidadeRepository.existsByNomeAndEstado_Uf(ufNorm, nomeCidade)) {
             throw new IllegalArgumentException("Cidade não reconhecida para a UF: " + ufNorm);
         }
 

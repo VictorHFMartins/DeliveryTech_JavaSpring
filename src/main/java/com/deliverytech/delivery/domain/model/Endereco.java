@@ -1,5 +1,7 @@
 package com.deliverytech.delivery.domain.model;
 
+import java.util.List;
+
 import com.deliverytech.delivery.domain.enums.TipoLogradouro;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -64,9 +66,9 @@ public class Endereco {
     @JoinColumn(name = "cep_id", nullable = false)
     private Cep cep;
 
-    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "endereco", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    private Cliente cliente;
+    private List<Cliente> cliente;
 
     @PrePersist
     public void PrePersist() {

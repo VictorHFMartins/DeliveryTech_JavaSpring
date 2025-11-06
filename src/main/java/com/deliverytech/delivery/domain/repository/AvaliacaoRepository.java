@@ -27,12 +27,12 @@ public interface AvaliacaoRepository extends JpaRepository<Avaliacao, Long> {
        SELECT a.restaurante AS restaurante,
               AVG(
                  CASE a.nota
-                   WHEN com.deliverytech.delivery.domain.model.Avaliacao$Nota.PESSIMO   THEN 0
-                   WHEN com.deliverytech.delivery.domain.model.Avaliacao$Nota.RUIM      THEN 1
-                   WHEN com.deliverytech.delivery.domain.model.Avaliacao$Nota.REGULAR   THEN 2
-                   WHEN com.deliverytech.delivery.domain.model.Avaliacao$Nota.BOM       THEN 3
-                   WHEN com.deliverytech.delivery.domain.model.Avaliacao$Nota.OTIMO     THEN 4
-                   WHEN com.deliverytech.delivery.domain.model.Avaliacao$Nota.EXCELENTE THEN 5
+                   WHEN com.deliverytech.delivery.domain.enums.NotaAvaliacao.PESSIMO   THEN 0
+                   WHEN com.deliverytech.delivery.domain.enums.NotaAvaliacao.RUIM      THEN 1
+                   WHEN com.deliverytech.delivery.domain.enums.NotaAvaliacao.REGULAR   THEN 2
+                   WHEN com.deliverytech.delivery.domain.enums.NotaAvaliacao.BOM       THEN 3
+                   WHEN com.deliverytech.delivery.domain.enums.NotaAvaliacao.OTIMO     THEN 4
+                   WHEN com.deliverytech.delivery.domain.enums.NotaAvaliacao.EXCELENTE THEN 5
                  END
               ) AS media
        FROM Avaliacao a

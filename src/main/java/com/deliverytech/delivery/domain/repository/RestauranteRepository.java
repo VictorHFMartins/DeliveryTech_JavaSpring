@@ -13,7 +13,7 @@ import com.deliverytech.delivery.domain.model.Restaurante;
 public interface RestauranteRepository extends JpaRepository<Restaurante, Long> {
 
     // Buscar Restaurante por categoria (método derivado)
-    Optional<Restaurante> findByCategoria(String email);
+    Optional<Restaurante> findByClasse(String email);
 
     // Buscar Restaurante ativos
     List<Restaurante> findByAtivoTrue();

@@ -102,7 +102,7 @@ public class EstadoService {
     }
 
     public boolean validarUf(String uf) {
-        return uf == null || !estadosMap.containsKey(uf.toUpperCase());
+        return uf != null && estadosMap.containsKey(uf.toUpperCase());
     }
 
     public String buscarNomePorUf(String Uf) {

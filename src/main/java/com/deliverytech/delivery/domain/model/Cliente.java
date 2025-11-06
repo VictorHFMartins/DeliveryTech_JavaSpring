@@ -48,7 +48,7 @@ public class Cliente {
     @Column(unique = true, nullable = false, length = 120)
     private String email;
 
-    @OneToMany(mappedBy = "telefone", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Telefone> telefones;
 
     @ManyToOne

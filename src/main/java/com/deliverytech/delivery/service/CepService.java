@@ -62,7 +62,7 @@ public class CepService {
 
     public Cidade salvar(String codigoCep, String uf) {
         String ufNorm = normalizarUf(uf);
-        if (!cidadeRepository.existeCidadeNaUf(ufNorm, codigoCep)) {
+        if (!cidadeRepository.existsByNomeAndEstado_Uf(ufNorm, codigoCep)) {
             throw new IllegalArgumentException("Cidade não reconhecida para a UF: " + ufNorm);
         }
 

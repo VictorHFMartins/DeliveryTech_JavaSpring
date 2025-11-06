@@ -5,8 +5,8 @@ import com.deliverytech.delivery.domain.model.Endereco;
 
 public record EnderecoRequest(
         Long id,
-        TipoLogradouro tipoLogradouro,
-        String logradouro,
+        String nome,
+        TipoLogradouro Logradouro,
         String numero,
         String bairro,
         String complemento,
@@ -23,8 +23,8 @@ public record EnderecoRequest(
 
         return new EnderecoRequest(
                 e.getId(),
-                e.getLogradouro(),
                 e.getNome(),
+                e.getLogradouro(),
                 e.getNumero(),
                 e.getBairro(),
                 e.getComplemento(),

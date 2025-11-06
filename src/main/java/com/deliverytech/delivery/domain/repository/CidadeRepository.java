@@ -17,6 +17,6 @@ public interface CidadeRepository extends JpaRepository<Cidade, Long> {
 
     Optional<Cidade> findByNomeIgnoreCaseAndEstadoUfIgnoreCase(String nomeCidade, String ufNorm);
 
-    boolean existeCidadeNaUf(String uf, String nomeCidade);
+    boolean existsByNomeAndEstado_Uf(String uf, String nomeCidade);
 
 }

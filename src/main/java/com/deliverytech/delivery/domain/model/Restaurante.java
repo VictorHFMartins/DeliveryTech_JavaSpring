@@ -1,102 +1,34 @@
 package com.deliverytech.delivery.domain.model;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.deliverytech.delivery.domain.enums.ClasseRestaurante;
 import com.deliverytech.delivery.domain.enums.EstadoRestaurante;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.AssertTrue;
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Entity
-@Table(
-        name = "restaurantes"
-// opcional: indexes = { @Index(name = "uk_restaurante_cnpj", columnList = "cnpj", unique = true) }
-)
+@Table(name = "restaurantes")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = "produtos")
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Builder
-public class Restaurante {
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public class Restaurante extends Usuario {
 
-    @Id
-    @EqualsAndHashCode.Include
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @NotBlank(message = "O nome é obrigatório")
-    @Column(nullable = false, length = 120)
-    private String nome;
-
-    @NotBlank(message = "CNPJ é obrigatório")
-    // Regex simples para CNPJ com ou sem máscara; ajuste se quiser forçar só dígitos.
-    @Pattern(
-            regexp = "^(\\d{14}|\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2})$",
-            message = "CNPJ inválido"
-    )
-    @Column(nullable = false, length = 18, unique = true)
+    @Column(length = 18, nullable = false)
     private String cnpj;
 
-    @OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    @Builder.Default
-    private List<Produto> produtos = new ArrayList<>();
-
-    @Size(max = 60)
-    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private ClasseRestaurante classe;
 
-    @Size(min = 8, max = 20, message = "Telefone deve ter entre 8 e 20 caracteres")
-    @Pattern(regexp = "^[\\d\\-\\+\\(\\)\\s]{8,20}$", message = "Telefone inválido")
-    private String telefone;
-
-    @Email(message = "E-mail inválido")
-    @Column(unique = true)
-    private String email;
-
-    private String endereco;
-
-    // Se quiser precisão exata, troque para BigDecimal com scale 6
-    @DecimalMin(value = "-90.0")
-    @DecimalMax(value = "90.0")
-    private double latitude;
-
-    @DecimalMin(value = "-180.0")
-    @DecimalMax(value = "180.0")
-    private double longitude;
-
+    @Column(nullable = true)
     private LocalTime horarioAbertura;
+
+    @Column(nullable = true)
     private LocalTime horarioFechamento;
 
     @AssertTrue(message = "Horário de abertura deve ser antes do fechamento")
@@ -106,64 +38,14 @@ public class Restaurante {
     }
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false)
     private EstadoRestaurante estado;
 
-    @Column(name = "data_cadastro", updatable = false)
-    private LocalDateTime dataCadastro;
-
-    @Column(nullable = false)
-    private Boolean ativo;
-
     @PrePersist
-    public void prePersist() {
-        this.dataCadastro = LocalDateTime.now();
-        if (this.ativo == null) {
-            this.ativo = Boolean.TRUE;
-        }
+    public void definirEstado() {
         if (this.estado == null) {
-            this.estado = EstadoRestaurante.FECHADO;
+            this.estado = EstadoRestaurante.ABERTO;
         }
     }
 
-    @Transient
-    public String getCoordenada() {
-        if (latitude == 0 && longitude == 0) {
-            return "Coordenadas não definidas";
-        }
-        return latitude + ", " + longitude;
-    }
-
-    public void inativar() {
-        this.ativo = false;
-    }
-
-    public void atualizarEstado(EstadoRestaurante novoEstado) {
-        this.estado = novoEstado;
-    }
-
-    public boolean isAberto() {
-        return this.estado == EstadoRestaurante.ABERTO;
-    }
-
-    public boolean isFechado() {
-        return this.estado == EstadoRestaurante.FECHADO;
-    }
-
-    public boolean isEmManutencao() {
-        return this.estado == EstadoRestaurante.MANUTENCAO;
-    }
-
-    public void atualizarCoordenadas(double lat, double lon) {
-        this.latitude = lat;
-        this.longitude = lon;
-    }
-
-    public void adicionarProduto(Produto produto) {
-        if (produto == null) {
-            return;
-        }
-        produto.setRestaurante(this);
-        this.produtos.add(produto);
-    }
 }

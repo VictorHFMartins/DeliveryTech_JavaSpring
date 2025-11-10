@@ -23,12 +23,12 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "cep")
+@Table(name = "ceps")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"cidade", "enderecos"})
+@ToString(exclude = { "cidade", "enderecos" })
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Builder
 public class Cep {

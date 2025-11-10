@@ -10,6 +10,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,6 +19,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,11 +49,11 @@ public class Endereco {
 
     @NotBlank(message = "nome é obrigatório")
     @Column(nullable = false, length = 150)
-    private String nome;
+    private String logradouro;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private TipoLogradouro logradouro;
+    private TipoLogradouro tipoLogradouro;
 
     @NotBlank(message = "numero é obrigatório")
     @Column(nullable = false, length = 10)
@@ -62,13 +66,26 @@ public class Endereco {
     @Column(nullable = false, length = 100)
     private String bairro;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cep_id", nullable = false)
     private Cep cep;
 
-    @OneToMany(mappedBy = "endereco", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "endereco", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<Cliente> cliente;
+    private List<Usuario> usuario;
+
+    @DecimalMin(value = "-90.0")
+    @DecimalMax(value = "90.0")
+    private Double latitude;
+
+    @DecimalMin(value = "-180.0")
+    @DecimalMax(value = "180.0")
+    private Double longitude;
+
+    @Transient
+    public String getCoordenada() {
+        return latitude + ", " + longitude;
+    }
 
     @PrePersist
     public void PrePersist() {

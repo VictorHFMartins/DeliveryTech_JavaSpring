@@ -1,5 +1,7 @@
 package com.deliverytech.delivery.domain.model;
 
+import com.deliverytech.delivery.domain.enums.TipoUsuario;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,15 +17,13 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
-@Table(name = "telefone")
+@Table(name = "telefones")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = "cliente")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Builder
 public class Telefone {
@@ -34,13 +34,12 @@ public class Telefone {
     private long id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "cliente_id", nullable = false)
-    private Cliente cliente;
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario;
 
-    @Column(name = "pais", nullable = false, length = 2)
-    private String pais;
+    private TipoUsuario tipoUsuario;
 
-    @Column(name = "estado", nullable = false, length = 2)
+    @Column(name = "ddd", nullable = false, length = 2)
     private String ddd;
 
     @Column(name = "numero", nullable = false, length = 9)

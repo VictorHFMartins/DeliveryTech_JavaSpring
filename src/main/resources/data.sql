@@ -3,7 +3,7 @@
 -- ===========================================================
 
 -- ===== ESTADOS =====
-INSERT INTO estados (nome, sigla) VALUES
+INSERT INTO estados (nome, uf) VALUES
 ('São Paulo', 'SP'),
 ('Rio de Janeiro', 'RJ');
 
@@ -15,40 +15,48 @@ INSERT INTO cidades (nome, estado_id) VALUES
 -- ===== CEPS =====
 INSERT INTO ceps (codigo, cidade_id) VALUES
 ('01000-000', 1),
-('20000-000', 2);
+('20000-000', 2),
+('04930-055', 1);
 
 -- ===== ENDEREÇOS =====
-INSERT INTO enderecos (nome, tipo_logradouro, numero, bairro, complemento, cep_id) VALUES
-('Rua A', 'RUA', '123', 'Centro', 'Sem complemento', 1),
-('Rua B', 'AVENIDA', '456', 'Copacabana', 'Apto 202', 2);
+INSERT INTO enderecos (nome, logradouro, numero, bairro, complemento, cep_id, latitude, longitude) VALUES
+('Rua A', 'RUA', '123', 'Centro', 'Sem complemento', 1, -23.561, -46.656),
+('Rua B', 'AVENIDA', '456', 'Copacabana', 'Apto 202', 2, -22.903, -43.176),
+('Rua C', 'AVENIDA', '222', 'Copacabana', 'Apto 651', 3, -10.903, -60.176);
 
 -- ===========================================================
 -- CLIENTES
 -- ===========================================================
-INSERT INTO clientes (nome, email, telefone, data_cadastro, ativo, endereco_id) VALUES
-('João Silva',  'joao@email.com',  '(11) 99999-1111', CURRENT_TIMESTAMP, TRUE, 1),
-('Maria Santos','maria@email.com', '(11) 99999-2222', CURRENT_TIMESTAMP, TRUE, 2),
-('Pedro Oliveira','pedro@email.com','(11) 99999-3333', CURRENT_TIMESTAMP, TRUE, 1);
+INSERT INTO clientes (nome, email, data_cadastro, ativo, endereco_id) VALUES
+('João Silva',  'joao@email.com',  CURRENT_TIMESTAMP, TRUE, 1),
+('Maria Santos','maria@email.com', CURRENT_TIMESTAMP, TRUE, 2),
+('Pedro Oliveira','pedro@email.com',CURRENT_TIMESTAMP, TRUE, 1);
+
+-- ===== TELEFONES =====
+INSERT INTO telefones (cliente_id, ddd, numero) VALUES
+(1, '11', '999991111'),
+(2, '11', '999992222'),
+(3, '11', '999993333');
 
 -- ===========================================================
 -- RESTAURANTES
 -- ===========================================================
 INSERT INTO restaurantes (
-  nome, cnpj, categoria, telefone, email,
-  latitude, longitude, horario_abertura, horario_fechamento,
+  nome, cnpj, classe, telefone, email,
+  horario_abertura, horario_fechamento,
   estado, data_cadastro, ativo, endereco_id
 ) VALUES
-('Pizzaria Bella', '12.345.678/0001-11', 'Italiana', '(11) 3333-1111', 'pizzariabella@email.com',
-  -23.561, -46.656, TIME '18:00:00', TIME '23:59:00',
+('Pizzaria Bella', '12.345.678/0001-11', 'ITALIANO', '(11) 3333-1111', 'pizzariabella@email.com',
+  TIME '18:00:00', TIME '23:59:00',
   'ABERTO', CURRENT_TIMESTAMP, TRUE, 1),
 
-('Burger House', '98.765.432/0001-22', 'Hamburgueria', '(11) 3333-2222', NULL,
-  -23.556, -46.667, TIME '11:00:00', TIME '22:00:00',
-  'ABERTO', CURRENT_TIMESTAMP, TRUE, 1),
+('Burger House', '98.765.432/0001-22', 'BRASILEIRO', '(11) 3333-2222', NULL,
+  TIME '11:00:00', TIME '22:00:00',
+  'ABERTO', CURRENT_TIMESTAMP, TRUE, 2),
 
-('Sushi Master', '11.222.333/0001-44', 'Japonesa', '(21) 3333-3333', NULL,
-  -22.903, -43.176, TIME '17:30:00', TIME '23:00:00',
-  'FECHADO', CURRENT_TIMESTAMP, TRUE, 2);
+('Sushi Master', '11.222.333/0001-44', 'FRANCES', '(21) 3333-3333', NULL,
+  TIME '17:30:00', TIME '23:00:00',
+  'FECHADO', CURRENT_TIMESTAMP, TRUE, 3);
 
 -- ===========================================================
 -- PRODUTOS

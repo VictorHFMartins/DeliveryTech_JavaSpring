@@ -1,38 +1,36 @@
 package com.deliverytech.delivery.api.dto;
 
+import java.util.List;
+
 import com.deliverytech.delivery.domain.enums.TipoLogradouro;
-import com.deliverytech.delivery.domain.model.Endereco;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record EnderecoRequest(
-        Long id,
-        String nome,
-        TipoLogradouro Logradouro,
-        String numero,
-        String bairro,
-        String complemento,
-        String cep,
-        String cidade,
-        String uf,
-        String estado
-        ) {
+                @NotBlank(message = "Nome do logradouro é obrigatório") 
+                String logradouro,
+                
+                @NotNull(message = "Tipo do logradouro é obrigatório") 
+                TipoLogradouro tipoLogradouro,
+                
+                @NotBlank(message = "Numero da residência é obrigatório") 
+                String numero,
 
-    public static EnderecoRequest of(Endereco e) {
-        var cep = e.getCep();
-        var cidade = cep != null ? cep.getCidade() : null;
-        var estado = cidade != null ? cidade.getEstado() : null;
+                String complemento,
+                
+                @NotBlank(message = "Nome do bairro é obrigatório") 
+                String bairro,
+                
+                @NotBlank(message = "CEP é obrigatório") 
+                String cepCodigo,
+                
+                List<Long> usuariosId,
+                
+                @NotNull(message = "Longitude é obrigatória") 
+                double longitude,
+                
+                @NotNull(message = "Latitude é obrigatória") 
+                double latitude) {
 
-        return new EnderecoRequest(
-                e.getId(),
-                e.getNome(),
-                e.getLogradouro(),
-                e.getNumero(),
-                e.getBairro(),
-                e.getComplemento(),
-                cep != null ? cep.getCodigo() : null,
-                cidade != null ? cidade.getNome() : null,
-                estado != null ? estado.getUf() : null,
-                estado != null ? estado.getNome() : null
-        );
-
-    }
 }

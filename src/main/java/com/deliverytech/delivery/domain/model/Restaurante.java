@@ -1,13 +1,24 @@
 package com.deliverytech.delivery.domain.model;
 
+import java.math.BigDecimal;
 import java.time.LocalTime;
 
-import com.deliverytech.delivery.domain.enums.ClasseRestaurante;
+import com.deliverytech.delivery.domain.enums.CategoriaRestaurante;
 import com.deliverytech.delivery.domain.enums.EstadoRestaurante;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.AssertTrue;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "restaurantes")
@@ -23,13 +34,16 @@ public class Restaurante extends Usuario {
     private String cnpj;
 
     @Column(nullable = false)
-    private ClasseRestaurante classe;
+    private CategoriaRestaurante categoria;
 
     @Column(nullable = true)
     private LocalTime horarioAbertura;
 
     @Column(nullable = true)
     private LocalTime horarioFechamento;
+
+    @Column(name = "taxa_entrega", nullable = false)
+    private BigDecimal taxaEntrega;
 
     @AssertTrue(message = "Horário de abertura deve ser antes do fechamento")
     public boolean isHorarioValido() {

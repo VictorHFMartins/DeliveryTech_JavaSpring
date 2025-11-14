@@ -139,7 +139,7 @@ public class EnderecoServiceImp implements EnderecoService {
 
     @Override
     public List<EnderecoResponse> listarPorCepCodigo(String CepCodigo) {
-        List<Endereco> enderecos = enderecoRepository.findByCepsCodigoContainingIgnoreCase(CepCodigo);
+        List<Endereco> enderecos = enderecoRepository.findByCepCodigoContainingIgnoreCase(CepCodigo);
         return enderecos.stream()
                 .map(EnderecoResponse::of)
                 .toList();

@@ -22,7 +22,7 @@ public interface RestauranteRepository extends JpaRepository<Restaurante, Long> 
     Optional<Restaurante> findByCnpj(String cnpj);
 
     // Buscar restaurantes ativos
-    List<Restaurante> findByAtivoTrue();
+    List<Restaurante> findByStatusTrue();
 
     // Busca por Estado do restaurante: ABERTO, FECHADO, MANUTENCAO
     List<Restaurante> findByEstado(EstadoRestaurante estado);
@@ -38,6 +38,9 @@ public interface RestauranteRepository extends JpaRepository<Restaurante, Long> 
 
     // Por taxa de entrega menor ou igual
     List<Restaurante> findByTaxaEntregaLessThanEqual(BigDecimal taxa);
+
+    // busca clientes por numero;
+    List<Restaurante> findByTelefonesNumeroContaining(String numero);
 
     // Top 5 restaurantes por nome (ordem alfabética)
     List<Restaurante> findTop5ByOrderByNomeAsc();

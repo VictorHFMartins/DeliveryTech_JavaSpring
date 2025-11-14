@@ -136,7 +136,7 @@ public class ClienteServiceImp implements ClienteService {
 
     @Override
     public List<ClienteResponse> listarPorStatusAtivo() {
-        List<Cliente> clientes = clienteRepository.findByAtivoTrue();
+        List<Cliente> clientes = clienteRepository.findByStatusTrue();
 
         return clientes.stream()
                 .map(ClienteResponse::of)
@@ -172,7 +172,7 @@ public class ClienteServiceImp implements ClienteService {
 
     @Override
     public List<ClienteResponse> listarPorTelefoneNum(String telefoneNum) {
-        List<Cliente> clientes = clienteRepository.findByTelefoneNumeroContaining(telefoneNum);
+        List<Cliente> clientes = clienteRepository.findByTelefonesNumeroContaining(telefoneNum);
 
         return clientes.stream()
                 .map(ClienteResponse::of)

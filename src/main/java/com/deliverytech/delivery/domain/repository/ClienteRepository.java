@@ -18,7 +18,7 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
     boolean existsByEmail(String email);
 
     // Buscar clientes ativos
-    List<Cliente> findByAtivoTrue();
+    List<Cliente> findByStatusTrue();
 
     // Buscar clientes por nome (parcial ou não)
     List<Cliente> findByNomeContainingIgnoreCase(String nome);
@@ -33,6 +33,6 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
     List<Cliente> findByEnderecoCepCidadeEstadoUfContainingIgnoreCase(String estadoUf);
 
     // busca clientes por numero;
-    List<Cliente> findByTelefoneNumeroContaining(String numero);
+    List<Cliente> findByTelefonesNumeroContaining(String numero);
 
 }

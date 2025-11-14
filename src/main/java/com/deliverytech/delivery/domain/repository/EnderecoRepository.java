@@ -13,7 +13,7 @@ import com.deliverytech.delivery.domain.model.Endereco;
 public interface EnderecoRepository extends JpaRepository<Endereco, Long> {
 
     // Busca residência por id de usuário
-    Endereco findByUsuariosId(Long UsuarioId);
+    Endereco findByUsuarioId(Long UsuarioId);
 
     // Buscar pelo numero da residência e nome ddo logradouro
     Optional<Endereco> findByNumeroAndLogradouroIgnoreCase(String numero, String LogradouroNome);
@@ -22,7 +22,7 @@ public interface EnderecoRepository extends JpaRepository<Endereco, Long> {
     boolean existsByNumeroAndLogradouroIgnoreCase(String numero, String LogradouroNome);
 
     // Lista residências por bairro
-    List<Endereco> findByBairroContainingIgnoreCase(String bairro);
+    List<Endereco> findByBairroContainingIgnoreCase(String nomeBairro);
 
     // Lista residências por tipo de logradouro
     List<Endereco> findByTipoLogradouro(TipoLogradouro tipoLogradouro);
@@ -31,5 +31,5 @@ public interface EnderecoRepository extends JpaRepository<Endereco, Long> {
     List<Endereco> findByLogradouroContainingIgnoreCase(String logradouroNome);
 
     // Buscar por código do CEP
-    List<Endereco> findByCepsCodigoContainingIgnoreCase(String codigoPostal);
+    List<Endereco> findByCepCodigoContainingIgnoreCase(String codigoPostal);
 }

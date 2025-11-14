@@ -1,6 +1,7 @@
 package com.deliverytech.delivery.domain.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -11,19 +12,25 @@ import com.deliverytech.delivery.domain.model.Telefone;
 @Repository
 public interface TelefoneRepository extends JpaRepository<Telefone, Long> {
 
-    // Busca lista de telefones de usuário
-    List<Telefone> findByUsuarioId(long id);
-
-    // Lista telefones por tipo de usuário
-    List<Telefone> findByTipoUsuario(TipoUsuario tipoUsuario);
+    // Busca por numeros ativos
+    List<Telefone> findByAtivoTrue();
 
     // Lista Telefones por ddd
     List<Telefone> findByDdd(String ddd);
 
-    // Busca telefone por número
-    List<Telefone> findByNumero(String numero);
+    // verifica telefone por número
+    boolean existsByNumero(String numero);
 
-    // Busca por numeros ativos
-    List<Telefone> findByAtivoTrue();
+    // Busca lista de telefones de usuário
+    List<Telefone> findByUsuarioId(long id);
+
+    // Busca telefone por número
+    List<Telefone> findByNumeroContaining(String numero);
+
+    // Lista telefones por tipo de usuário
+    List<Telefone> findByTipoUsuario(TipoUsuario tipoUsuario);
     
+    // Busca por telefone específico
+    Optional<Telefone> findByDddAndNumero(String ddd, String Numero);
+
 }

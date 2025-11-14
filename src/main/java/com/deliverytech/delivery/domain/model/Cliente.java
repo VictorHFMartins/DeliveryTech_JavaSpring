@@ -1,6 +1,7 @@
 package com.deliverytech.delivery.domain.model;
 
 import com.deliverytech.delivery.domain.enums.TipoTelefone;
+import com.deliverytech.delivery.domain.enums.TipoUsuario;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrePersist;
@@ -20,10 +21,13 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class Cliente extends Usuario {
 
+    private TipoUsuario tipoUsuario;
+
     @PrePersist
     public void definirTipo() {
         if (this.tipoTelefone == null) {
             this.tipoTelefone = TipoTelefone.CLIENTE;
         }
+        tipoUsuario = TipoUsuario.CLIENTE;
     }
 }

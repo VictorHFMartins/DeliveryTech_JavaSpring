@@ -1,11 +1,11 @@
-package com.deliverytech.delivery.api.dto;
 
-import java.util.List;
+package com.deliverytech.delivery.api.dto;
 
 import com.deliverytech.delivery.domain.enums.TipoLogradouro;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
 
 public record EnderecoRequest(
                 @NotBlank(message = "Nome do logradouro é obrigatório") 
@@ -25,7 +25,8 @@ public record EnderecoRequest(
                 @NotBlank(message = "CEP é obrigatório") 
                 String cepCodigo,
                 
-                List<Long> usuariosId,
+                @NotNull
+                Long cidadeId,
                 
                 @NotNull(message = "Longitude é obrigatória") 
                 double longitude,

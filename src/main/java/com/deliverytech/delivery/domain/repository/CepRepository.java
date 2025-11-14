@@ -11,8 +11,11 @@ import com.deliverytech.delivery.domain.model.Cep;
 @Repository
 public interface CepRepository extends JpaRepository<Cep, Long> {
 
-    // Buscar por Código
+    // Buscar por código
     Optional<Cep> findByCodigo(String codigo);
+    
+    // verifica por código 
+    boolean existsByCodigo(String codigo);
 
     // Buscar ceps por cidade
     List<Cep> findByCidadeNomeContainingIgnoreCase(String nomeCidade);

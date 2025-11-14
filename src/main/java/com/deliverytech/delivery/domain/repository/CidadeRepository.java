@@ -11,6 +11,12 @@ import com.deliverytech.delivery.domain.model.Cidade;
 @Repository
 public interface CidadeRepository extends JpaRepository<Cidade, Long> {
 
+    // valida se existe
+    boolean existsByNome(String nome);
+
+    // Busca por nome exato
+    Optional<Cidade> findByNomeIgnoreCase(String nome);
+
     // Busca cidades por nome
     List<Cidade> findByNomeContainingIgnoreCase(String nome);
 

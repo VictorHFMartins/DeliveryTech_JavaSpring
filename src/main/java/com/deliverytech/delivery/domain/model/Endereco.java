@@ -22,7 +22,6 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -47,7 +46,6 @@ public class Endereco {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "nome é obrigatório")
     @Column(nullable = false, length = 150)
     private String logradouro;
 
@@ -55,14 +53,12 @@ public class Endereco {
     @Column(nullable = false, length = 20)
     private TipoLogradouro tipoLogradouro;
 
-    @NotBlank(message = "numero é obrigatório")
     @Column(nullable = false, length = 10)
     private String numero;
 
     @Column(length = 50)
     private String complemento;
 
-    @NotBlank(message = "bairro é obrigatório")
     @Column(nullable = false, length = 100)
     private String bairro;
 
@@ -74,10 +70,12 @@ public class Endereco {
     @JsonIgnore
     private List<Usuario> usuario;
 
+    @Transient
     @DecimalMin(value = "-90.0")
     @DecimalMax(value = "90.0")
     private Double latitude;
 
+    @Transient
     @DecimalMin(value = "-180.0")
     @DecimalMax(value = "180.0")
     private Double longitude;

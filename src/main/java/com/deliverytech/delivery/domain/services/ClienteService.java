@@ -7,26 +7,26 @@ import com.deliverytech.delivery.api.dto.ClienteResponse;
 
 public interface ClienteService {
 
-    ClienteResponse criar(ClienteRequest cliente);
+    void ativarDesativar(Long clienteId);
 
-    ClienteResponse alterar(Long id, ClienteRequest novoCliente);
+    ClienteResponse criar(ClienteRequest clienteDto);
 
-    ClienteResponse buscarPorId(long id);
+    ClienteResponse atualizar(Long id, ClienteRequest clienteDto);
 
-    ClienteResponse buscarPorEmail(String email);
+    ClienteResponse buscarPorId(long idCliente);
 
-    ClienteResponse ativarDesativar(Long clienteId);
-
-    List<ClienteResponse> listarPorNomeContendo(String nome);
+    ClienteResponse buscarPorEmail(String emailCliente);
 
     List<ClienteResponse> listarPorStatusAtivo();
 
-    List<ClienteResponse> listarPorCep(String nome);
+    List<ClienteResponse> listarPorCep(String cepCodigo);
 
-    List<ClienteResponse> listarPorCidade(String nome);
+    List<ClienteResponse> listarPorNomeContendo(String nomeCliente);
 
-    List<ClienteResponse> listarPorNomeEstado(String nome);
+    List<ClienteResponse> listarPorCidade(String cidadeNome);
 
-    List<ClienteResponse> listarPorTelefoneNum(String nome);
+    List<ClienteResponse> listarPorEstadoUf(String estadoUf);
+
+    List<ClienteResponse> listarPorTelefoneNum(String numeroTelefone);
 
 }

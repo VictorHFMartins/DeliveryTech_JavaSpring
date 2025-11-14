@@ -5,6 +5,8 @@ import java.time.LocalTime;
 
 import com.deliverytech.delivery.domain.enums.CategoriaRestaurante;
 import com.deliverytech.delivery.domain.enums.EstadoRestaurante;
+import com.deliverytech.delivery.domain.enums.TipoTelefone;
+import com.deliverytech.delivery.domain.enums.TipoUsuario;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -55,11 +57,15 @@ public class Restaurante extends Usuario {
     @Column(nullable = false)
     private EstadoRestaurante estado;
 
+    private TipoUsuario tipoUsuario;
+
     @PrePersist
     public void definirEstado() {
         if (this.estado == null) {
             this.estado = EstadoRestaurante.ABERTO;
         }
+        
+        tipoTelefone = TipoTelefone.RESTAURANTE;
     }
 
 }

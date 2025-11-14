@@ -4,18 +4,21 @@ import java.util.List;
 
 import com.deliverytech.delivery.api.dto.CidadeRequest;
 import com.deliverytech.delivery.api.dto.CidadeResponse;
+import com.deliverytech.delivery.domain.model.Cidade;
 
 public interface CidadeService {
 
-    CidadeResponse criar(CidadeRequest cidade);
+    Cidade buscarOuCriar(CidadeRequest dto);
 
-    CidadeResponse alterar(long id, CidadeRequest cidade);
+    CidadeResponse criar(CidadeRequest cidadeDto);
 
-    CidadeResponse buscarPorId(Long id);
+    CidadeResponse alterar(long id, CidadeRequest cidadeDto);
 
-    CidadeResponse buscarCidadePorEstado(String nome, String estadoUf);
+    CidadeResponse buscarPorId(Long cidadeId);
 
-    List<CidadeResponse> buscarPorNomeContendo(String nome);
+    CidadeResponse buscarCidadePorEstado(String nomeEstado, String estadoUf);
+
+    List<CidadeResponse> buscarPorNomeContendo(String nomeCidade);
 
     List<CidadeResponse> buscarCidadesPorEstadoUf(String estadoUf);
 

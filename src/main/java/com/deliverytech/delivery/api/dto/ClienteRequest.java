@@ -10,12 +10,12 @@ public record ClienteRequest(
         @NotBlank(message = "O nome é obrigatório") 
         String nome,
 
-        @NotBlank(message = "Email é obrigatório") @Email(message = "E-mail inválido") 
+        @NotBlank(message = "Email é obrigatório") 
         @Email(message = "E-mail inválido")
         String email,
         
         @NotNull(message = "O id do telefone é obrigatório") 
-        List<Long> telefoneId,
+        List<Long> telefoneIds,
         
         @NotNull(message = "Endereço é obrigatório") 
         Long enderecoId) {

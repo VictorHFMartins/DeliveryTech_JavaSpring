@@ -4,17 +4,20 @@ import java.util.List;
 
 import com.deliverytech.delivery.api.dto.EstadoRequest;
 import com.deliverytech.delivery.api.dto.EstadoResponse;
+import com.deliverytech.delivery.domain.model.Estado;
 
 public interface EstadoService {
 
-    EstadoResponse criar(EstadoRequest estado);
+    Estado buscarOuCriar(EstadoRequest dto);
 
-    EstadoResponse alterar(Long id, EstadoRequest estado);
+    EstadoResponse criar(EstadoRequest estadoDto);
 
-    EstadoResponse buscarPorUf(String Uf);
+    EstadoResponse alterar(Long idEstado, EstadoRequest estadoDto);
+
+    EstadoResponse buscarPorUf(String ufEstado);
 
     EstadoResponse buscarPorCidade(String nomeCidade);
 
-    List<EstadoResponse> listarPorNomeContendo(String nome);
+    List<EstadoResponse> listarPorNomeContendo(String nomeEstado);
 
 }

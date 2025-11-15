@@ -60,7 +60,7 @@ CREATE TABLE usuarios (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
-    tipo_telefone VARCHAR(20),
+    tipo_usuario enum('CLIENTE','RESTAURANTE'),
     endereco_id BIGINT NOT NULL,
     status BOOLEAN DEFAULT TRUE,
     data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -72,7 +72,7 @@ CREATE TABLE usuarios (
 -- ===========================================
 CREATE TABLE clientes (
     id BIGINT PRIMARY KEY,
-    tipo_usuario VARCHAR(20) DEFAULT 'CLIENTE',
+    tipo_usuario enum('CLIENTE', 'RESTAURANTE') DEFAULT 'CLIENTE',
     CONSTRAINT fk_cliente_usuario FOREIGN KEY (id) REFERENCES usuarios(id)
 );
 
@@ -87,12 +87,12 @@ CREATE TABLE restaurantes (
     horario_fechamento TIME,
     taxa_entrega DECIMAL(10, 2),
     estado VARCHAR(20),
-    tipo_usuario VARCHAR(20) DEFAULT 'RESTAURANTE',
+    tipo_usuario enum('CLIENTE', 'RESTAURANTE') DEFAULT 'RESTAURANTE',
     CONSTRAINT fk_restaurante_usuario FOREIGN KEY (id) REFERENCES usuarios(id)
 );
 
 -- ===========================================
--- TELEFONE
+-- TELEFONE (1:N com Usuario)
 -- ===========================================
 CREATE TABLE telefones (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -101,5 +101,6 @@ CREATE TABLE telefones (
     tipo VARCHAR(20),
     ativo BOOLEAN DEFAULT TRUE,
     usuario_id BIGINT NOT NULL,
+    tipo_usuario enum('CLIENTE', 'RESTAURANTE'),
     CONSTRAINT fk_telefone_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );

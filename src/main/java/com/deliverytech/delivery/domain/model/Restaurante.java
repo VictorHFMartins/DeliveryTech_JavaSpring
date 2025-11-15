@@ -5,7 +5,6 @@ import java.time.LocalTime;
 
 import com.deliverytech.delivery.domain.enums.CategoriaRestaurante;
 import com.deliverytech.delivery.domain.enums.EstadoRestaurante;
-import com.deliverytech.delivery.domain.enums.TipoTelefone;
 import com.deliverytech.delivery.domain.enums.TipoUsuario;
 
 import jakarta.persistence.Column;
@@ -36,6 +35,7 @@ public class Restaurante extends Usuario {
     private String cnpj;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private CategoriaRestaurante categoria;
 
     @Column(nullable = true)
@@ -57,15 +57,14 @@ public class Restaurante extends Usuario {
     @Column(nullable = false)
     private EstadoRestaurante estado;
 
-    private TipoUsuario tipoUsuario;
-
     @PrePersist
     public void definirEstado() {
         if (this.estado == null) {
             this.estado = EstadoRestaurante.ABERTO;
         }
-        
-        tipoTelefone = TipoTelefone.RESTAURANTE;
+        if (tipoUsuario != null) {
+            tipoUsuario = TipoUsuario.RESTAURANTE;
+        }
     }
 
 }

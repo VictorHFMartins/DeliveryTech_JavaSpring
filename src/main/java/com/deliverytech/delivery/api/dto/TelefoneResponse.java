@@ -10,8 +10,7 @@ public record TelefoneResponse(
         boolean ativo,
         TipoUsuario tipoUsuario,
         UsuarioResponse usuario
-
-) {
+        ) {
 
     public static TelefoneResponse of(Telefone t) {
         return new TelefoneResponse(

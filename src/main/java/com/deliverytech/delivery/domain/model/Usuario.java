@@ -3,7 +3,7 @@ package com.deliverytech.delivery.domain.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.deliverytech.delivery.domain.enums.TipoTelefone;
+import com.deliverytech.delivery.domain.enums.TipoUsuario;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -47,9 +47,6 @@ public abstract class Usuario {
     @Column(nullable = false, unique = true)
     protected String email;
 
-    @Enumerated(EnumType.STRING)
-    protected TipoTelefone tipoTelefone;
-
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     protected List<Telefone> telefones;
 
@@ -62,6 +59,10 @@ public abstract class Usuario {
 
     @Column(name = "data_cadastro", nullable = false)
     protected LocalDateTime dataCadastro;
+
+    @Column(nullable = true, name = "tipo_usuario")
+    @Enumerated(EnumType.STRING)
+    protected TipoUsuario tipoUsuario;
 
     @PrePersist
     protected void onCreate() {

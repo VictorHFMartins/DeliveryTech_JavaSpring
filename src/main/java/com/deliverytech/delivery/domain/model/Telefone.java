@@ -4,6 +4,8 @@ import com.deliverytech.delivery.domain.enums.TipoUsuario;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -37,22 +39,27 @@ public class Telefone {
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
-    private TipoUsuario tipoUsuario;
-
-    @Column(name = "ddd", nullable = false, length = 2)
+    @Column(name = "ddd", nullable = false, length = 3)
     private String ddd;
 
-    @Column(name = "numero", nullable = false, length = 9)
+    @Column(name = "numero", nullable = false, length = 15)
     private String numero;
 
     @Column(name = "ativo", nullable = false)
     private boolean ativo;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_usuario", nullable = true)
+    private TipoUsuario tipoUsuario;
 
     @PrePersist
     public void prePersist() {
 
         if (ativo == false) {
             ativo = true;
+        }
+        if (tipoUsuario != null) {
+            this.tipoUsuario = usuario.getTipoUsuario();
         }
     }
 

@@ -3,11 +3,10 @@ package com.deliverytech.delivery;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.deliverytech.delivery")
 public class DeliveryApiApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(DeliveryApiApplication.class, args);
     }
-
 }

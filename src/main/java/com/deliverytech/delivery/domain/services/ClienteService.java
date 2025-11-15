@@ -7,7 +7,9 @@ import com.deliverytech.delivery.api.dto.ClienteResponse;
 
 public interface ClienteService {
 
-    void ativarDesativar(Long clienteId);
+    void excluir(Long id);
+
+    ClienteResponse ativarDesativar(Long clienteId);
 
     ClienteResponse criar(ClienteRequest clienteDto);
 
@@ -15,18 +17,10 @@ public interface ClienteService {
 
     ClienteResponse buscarPorId(long idCliente);
 
-    ClienteResponse buscarPorEmail(String emailCliente);
-
     List<ClienteResponse> listarPorStatusAtivo();
 
-    List<ClienteResponse> listarPorCep(String cepCodigo);
+    List<ClienteResponse> buscarComFiltros(String nome, String email, String cep, String cidade, String estado, String telefone);
 
-    List<ClienteResponse> listarPorNomeContendo(String nomeCliente);
-
-    List<ClienteResponse> listarPorCidade(String cidadeNome);
-
-    List<ClienteResponse> listarPorEstadoUf(String estadoUf);
-
-    List<ClienteResponse> listarPorTelefoneNum(String numeroTelefone);
+    List<ClienteResponse> listarTodos();
 
 }

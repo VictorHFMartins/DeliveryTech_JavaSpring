@@ -15,9 +15,9 @@ import com.deliverytech.delivery.domain.model.Cliente;
 import com.deliverytech.delivery.domain.model.Endereco;
 import com.deliverytech.delivery.domain.model.Telefone;
 import com.deliverytech.delivery.domain.repository.ClienteRepository;
-import com.deliverytech.delivery.domain.repository.EnderecoRepository;
 import com.deliverytech.delivery.domain.repository.TelefoneRepository;
 import com.deliverytech.delivery.domain.services.ClienteService;
+import com.deliverytech.delivery.domain.validator.EnderecoValidator;
 import com.deliverytech.delivery.domain.validator.UsuarioValidator;
 
 import jakarta.transaction.Transactional;
@@ -29,10 +29,10 @@ import lombok.RequiredArgsConstructor;
 public class ClienteServiceImp implements ClienteService {
 
     private final ClienteRepository clienteRepository;
-    private final EnderecoRepository enderecoRepository;
     private final TelefoneRepository telefoneRepository;
 
     private final UsuarioValidator usuarioValidator;
+    private final EnderecoValidator enderecoValidator;
 
     private final ModelMapper modelMapper;
 
@@ -93,16 +93,31 @@ public class ClienteServiceImp implements ClienteService {
 
             clienteExistente.getTelefones().addAll(novosTelefones);
         }
-        Endereco endereco = validarEndereco(dto.enderecoId());
+        Endereco endereco = enderecoValidator.validarEndereco(dto.enderecoId());
+
         clienteExistente.setEndereco(endereco);
+        clienteRepository.save(clienteExistente);
 
         return ClienteResponse.of(clienteExistente);
     }
 
-    public Endereco validarEndereco(Long enderecoId) {
+    @Override
+    public ClienteResponse ativarDesativar(Long clienteId) {
+        Cliente cliente = (Cliente) usuarioValidator.validarUsuario(clienteId);
+        cliente.setStatus(!cliente.isStatus());
 
-        return enderecoRepository.findById(Objects.requireNonNull(enderecoId))
-                .orElseThrow(() -> new EntityNotFoundException("Endereço não encontrado com ID: " + enderecoId));
+        return ClienteResponse.of(cliente);
+    }
+
+    @Override
+    public void excluir(Long idCliente) {
+        Long id = Objects.requireNonNull(idCliente);
+
+        if (!clienteRepository.existsById(id)) {
+            throw new EntityNotFoundException("Cliente não encontrado para o id: " + id);
+        }
+
+        clienteRepository.deleteById(id);
     }
 
     @Override
@@ -110,28 +125,6 @@ public class ClienteServiceImp implements ClienteService {
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Id não encontrado."));
         return ClienteResponse.of(cliente);
-    }
-
-    @Override
-    public ClienteResponse buscarPorEmail(String email) {
-        Cliente cliente = clienteRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("E-mail não encontrado: " + email));
-        return ClienteResponse.of(cliente);
-    }
-
-    @Override
-    public void ativarDesativar(Long clienteId) {
-        Cliente cliente = (Cliente) usuarioValidator.validarUsuario(clienteId);
-
-        cliente.setStatus(!cliente.isStatus());
-    }
-
-    @Override
-    public List<ClienteResponse> listarPorNomeContendo(String nome) {
-        List<Cliente> clientes = clienteRepository.findByNomeContainingIgnoreCase(nome);
-
-        return clientes.stream()
-                .map(ClienteResponse::of)
-                .toList();
     }
 
     @Override
@@ -144,8 +137,8 @@ public class ClienteServiceImp implements ClienteService {
     }
 
     @Override
-    public List<ClienteResponse> listarPorCep(String cepCodigo) {
-        List<Cliente> clientes = clienteRepository.findByEnderecoCepCodigo(cepCodigo);
+    public List<ClienteResponse> listarTodos() {
+        List<Cliente> clientes = clienteRepository.findAll();
 
         return clientes.stream()
                 .map(ClienteResponse::of)
@@ -153,30 +146,49 @@ public class ClienteServiceImp implements ClienteService {
     }
 
     @Override
-    public List<ClienteResponse> listarPorCidade(String cidadeNome) {
-        List<Cliente> clientes = clienteRepository.findByEnderecoCepCidadeNomeContainingIgnoreCase(cidadeNome);
+    public List<ClienteResponse> buscarComFiltros(String nome, String email, String cep, String cidade, String estado, String telefone) {
+
+        List<Cliente> clientes = clienteRepository.findAll();
+
+        if (nome != null && !nome.isBlank()) {
+            clientes = clientes.stream()
+                    .filter(c -> c.getNome().toLowerCase().contains(nome.toLowerCase()))
+                    .toList();
+        }
+
+        if (email != null && !email.isBlank()) {
+            clientes = clientes.stream()
+                    .filter(c -> c.getEmail().equalsIgnoreCase(email))
+                    .toList();
+        }
+
+        if (cep != null && !cep.isBlank()) {
+            clientes = clientes.stream()
+                    .filter(c -> c.getEndereco().getCep().getCodigo().equals(cep))
+                    .toList();
+        }
+
+        if (cidade != null && !cidade.isBlank()) {
+            clientes = clientes.stream()
+                    .filter(c -> c.getEndereco().getCep().getCidade().getNome().equalsIgnoreCase(cidade))
+                    .toList();
+        }
+
+        if (estado != null && !estado.isBlank()) {
+            clientes = clientes.stream()
+                    .filter(c -> c.getEndereco().getCep().getCidade().getEstado().getUf().equalsIgnoreCase(estado))
+                    .toList();
+        }
+
+        if (telefone != null && !telefone.isBlank()) {
+            clientes = clientes.stream()
+                    .filter(c -> c.getTelefones().stream()
+                    .anyMatch(t -> t.getNumero().contains(telefone)))
+                    .toList();
+        }
 
         return clientes.stream()
                 .map(ClienteResponse::of)
                 .toList();
     }
-
-    @Override
-    public List<ClienteResponse> listarPorEstadoUf(String estadoUf) {
-        List<Cliente> clientes = clienteRepository.findByEnderecoCepCidadeEstadoUfContainingIgnoreCase(estadoUf);
-
-        return clientes.stream()
-                .map(ClienteResponse::of)
-                .toList();
-    }
-
-    @Override
-    public List<ClienteResponse> listarPorTelefoneNum(String telefoneNum) {
-        List<Cliente> clientes = clienteRepository.findByTelefonesNumeroContaining(telefoneNum);
-
-        return clientes.stream()
-                .map(ClienteResponse::of)
-                .toList();
-    }
-
 }
